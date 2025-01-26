@@ -1,7 +1,6 @@
 import psutil
 import csv
 import smtplib
-import subprocess
 import platform
 import os
 import pandas as pd
@@ -14,19 +13,29 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
-from dash import Dash, dcc, html
-import plotly.graph_objects as go
+from dotenv import load_dotenv
 
-# Set environment variables at the start of the script
+# Load environment variables from GitHub Secrets or .env file
+load_dotenv()
 EMAIL = os.getenv('EMAIL')
 EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
 RECEIVER_EMAIL = os.getenv('RECEIVER_EMAIL')
 
-# Function to collect system health metrics
+if not EMAIL or not EMAIL_PASSWORD or not RECEIVER_EMAIL:
+    print("Error: Missing required environment variables.")
+    exit()
+
+ALERT_THRESHOLD = 80  # Set the CPU usage threshold
+
+# Function to collect system health metrics and trigger alerts
 def get_system_health():
     cpu_usage = psutil.cpu_percent(interval=1)
     memory = psutil.virtual_memory()
     disk = psutil.disk_usage('/')
+
+    if cpu_usage > ALERT_THRESHOLD:
+        send_alert_email(cpu_usage, memory.percent, disk.percent)
+
     return {
         "cpu": cpu_usage,
         "memory": memory.percent,
@@ -124,29 +133,5 @@ def send_email_report(report_file):
 health_data = get_system_health()
 os_name = platform.system()
 log_metrics(health_data)
-
-# Generate and email the report
 report_file = generate_report_with_graph(health_data['cpu'], health_data['memory'], health_data['disk'], os_name)
 send_email_report(report_file)
-
-# Dash web dashboard
-app = Dash(__name__)
-df = pd.read_csv('system_health_log.csv', names=['timestamp', 'cpu', 'memory', 'disk', 'os'])
-df['timestamp'] = pd.to_datetime(df['timestamp'], format='%Y-%m-%d %H:%M:%S', errors='coerce')
-df = df.dropna()
-fig = go.Figure()
-fig.add_trace(go.Scatter(x=df['timestamp'], y=df['cpu'], mode='lines', name='CPU Usage'))
-fig.add_trace(go.Scatter(x=df['timestamp'], y=df['memory'], mode='lines', name='Memory Usage'))
-fig.add_trace(go.Scatter(x=df['timestamp'], y=df['disk'], mode='lines', name='Disk Usage'))
-
-fig.update_layout(xaxis=dict(tickangle=45, tickformat='%Y-%m-%d %H:%M'))
-
-app.layout = html.Div(children=[
-    html.H1(children='System Health Monitor'),
-    dcc.Graph(figure=fig),
-])
-
-if __name__ == '__main__':
-    port = 8050
-    print(f"Dashboard running at http://127.0.0.1:{port}")
-    app.run(debug=True, port=port)
