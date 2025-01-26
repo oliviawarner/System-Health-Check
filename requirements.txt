@@ -1,0 +1,7 @@
+psutil
+pandas
+matplotlib
+reportlab
+dash
+plotly
+python-dotenv
