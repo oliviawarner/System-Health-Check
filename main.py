@@ -125,7 +125,6 @@ def send_email_report(report_file):
             server.sendmail(sender_email, receiver_email, text)
             server.quit()
             print("Email sent successfully.")
-            os.remove(report_file)  # Delete report after sending to prevent resending
         except Exception as e:
             print(f"Failed to send email: {e}")
 
