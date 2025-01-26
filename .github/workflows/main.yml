@@ -25,7 +25,7 @@ jobs:
           EMAIL: ${{ secrets.EMAIL }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
-        run: python system_health_check.py
+        run: python main.py
 
       - name: Upload report artifact
         uses: actions/upload-artifact@v4
