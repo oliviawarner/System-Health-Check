@@ -110,10 +110,10 @@ Sample system health report (generated PDF):
 ---
 
 ## Future Enhancements
-
-- 📊 Improved visualizations with interactive dashboards.
-- ☁️ Cloud storage integration for report archival.
-- 📈 Historical trend analysis over time.
+- Running on a AWS hosted VM with:
+   - 📊 Improved visualizations with interactive dashboards.
+   - ☁️ Cloud storage integration for report archival.
+   - 📈 Historical trend analysis over time.
 
 ---
 
