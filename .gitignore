@@ -169,3 +169,7 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+system_health_report.pdf
+system_health_graph.png
+system_health_log.csv

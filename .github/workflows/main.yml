@@ -18,7 +18,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; else echo "requirements.txt not found, skipping installation"; fi
 
       - name: Run system health check script
         env:
@@ -27,8 +27,14 @@ jobs:
           RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
         run: python main.py
 
+      - name: List files for debugging
+        run: ls -lah
+
       - name: Upload report artifact
         uses: actions/upload-artifact@v4
         with:
           name: system_health_report
-          path: system_health_report.pdf
+          path: |
+            system_health_report.pdf
+            system_health_graph.png
+            system_health_log.csv
