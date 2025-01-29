@@ -79,7 +79,7 @@ The script uses environment variables to store sensitive data securely. These va
 
 ```
 .
-├── system_health_check.py  # Main script to monitor system health
+├── main.py  # Main script to monitor system health
 ├── requirements.txt       # Dependencies
 ├── .github/workflows      # GitHub Actions workflow configuration
 ├── system_health_log.csv  # Log file for system health data
