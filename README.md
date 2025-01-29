@@ -26,8 +26,8 @@ Ensure you have the following installed:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/automated-system-health-check.git
-   cd automated-system-health-check
+   git clone https://github.com/yourusername/system-health-check.git
+   cd system-health-check
    ```
 
 2. Install dependencies:
@@ -47,7 +47,7 @@ Ensure you have the following installed:
 4. Run the script locally:
 
    ```bash
-   python system_health_check.py
+   python main.py
    ```
 
 ---
